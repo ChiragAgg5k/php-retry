@@ -183,4 +183,24 @@ describe('DependencyResolver', () => {
     const testsToRun = filter ? filter.split('|').length : 0;
     expect(testsToRun).toBe(0);
   });
+
+  test('should parse #[Depends] attributes from PHP file', () => {
+    const resolver = new DependencyResolver();
+    const testFile = path.join(fixturesDir, 'attribute-test.php');
+
+    resolver.parseTestFile(testFile);
+
+    const filter = resolver.buildFilterPattern([
+      {
+        name: 'Tests\\E2E\\Services\\Sample\\AttributeSampleTest::testDelete',
+        class: 'AttributeSampleTest',
+        method: 'testDelete',
+        file: testFile,
+      },
+    ]);
+
+    expect(filter).toContain('AttributeSampleTest::testDelete');
+    expect(filter).toContain('AttributeSampleTest::testUpdate');
+    expect(filter).toContain('AttributeSampleTest::testCreate');
+  });
 });
