@@ -1,30 +1,19 @@
 <?php
 
-namespace Tests\E2E\Services\Sample;
+namespace Tests\Cloud\E2E\General;
 
 use PHPUnit\Framework\Attributes\Depends;
 
-class AttributeSampleTest
+class UsageTest
 {
-    public function testCreate(): array
+    public function testPrepareStorageUsage(): array
     {
-        return ['id' => 123];
+        return ['bucketId' => 'x'];
     }
 
-    #[Depends('testCreate')]
-    public function testUpdate(array $data): array
+    #[Depends('testPrepareStorageUsage')]
+    public function testGaugesResourceTypeDimension(): void
     {
-        return array_merge($data, ['updated' => true]);
-    }
-
-    #[Depends('testUpdate')]
-    public function testDelete(array $data): void
-    {
-        // Delete logic
-    }
-
-    public function testIndependent(): void
-    {
-        // No dependencies
+        // Fails without its dependency in the retry --filter.
     }
 }
